@@ -1,0 +1,103 @@
+===============================
+Express JS - Basic Server Notes
+===============================
+
+Create Express server:
+
+0. initialize project:
+   npm init
+
+1. install express:
+   npm install express
+
+2. install postman:
+   download from internet and install
+
+3. install nodemon:
+   npm install -g nodemon
+   (used for auto restart when code changes)
+
+
+--------------------------------
+Code Explanation (Line by Line)
+--------------------------------
+
+1. const express = require("express");
+
+   - This line imports the express library.
+   - require("express") loads the express package.
+   - The returned value is stored in the variable named "express".
+
+
+2. const app = express();
+
+   - This creates a new express application.
+   - "app" is our main server object.
+   - We use this "app" to create routes and start the server.
+
+
+3. app.use("/test", (req, res) => { ... });
+
+   - app.use() is used to handle requests.
+   - "/test" is the route (URL path).
+   - This function runs when someone opens:
+     http://localhost:3000/test
+
+   - req = request (data coming from user)
+   - res = response (data we send back to user)
+
+
+4. res.send("Hello from server!");
+
+   - Sends a response to the browser.
+   - The browser will display: "Hello from server!"
+
+
+5. app.use("/hello", (req, res) => { ... });
+
+   - This is another route.
+   - It runs when someone opens:
+     http://localhost:3000/hello
+
+
+6. res.send("from hello route");
+
+   - Sends this message as the response.
+   - Output in browser: "from hello route"
+
+
+7. app.listen(3000, () => { ... });
+
+   - This starts the server.
+   - 3000 is the port number.
+   - The server will run at:
+     http://localhost:3000
+
+
+8. console.log("Server is successfully listening on port: 3000.....");
+
+   - This message shows in the terminal.
+   - It confirms that the server is running successfully.
+
+
+--------------------------------
+Final Output
+--------------------------------
+
+1. http://localhost:3000/test
+   Output → Hello from server!
+
+2. http://localhost:3000/hello
+   Output → from hello route
+
+
+--------------------------------
+Important Points
+--------------------------------
+
+- express is used to create backend servers.
+- app is the main express app.
+- app.use() is used to create routes.
+- req = request from client.
+- res = response from server.
+- app.listen() is used to start the server.
