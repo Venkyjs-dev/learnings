@@ -1,34 +1,31 @@
 const express = require("express");
-
+const connectDB = require("./config/database");
 const app = express();
-const { adminAuth, userAuth } = require("./middlerwares/auth");
+const User = require("./models/user");
 
-// app.use("/admin", adminAuth);
-
-// app.get("/admin/getAllData", (req, res, next) => {
-//   res.send("getAll data");
-// });
-
-// app.get("/admin/deleteUser", (req, res, next) => {
-//   res.send("deleted user");
-// });
-
-app.use("/user", userAuth);
-
-app.get("/user/getUser", (req, res) => {
+app.post("/signup", async (req, res) => {
+  //create a new instance of the user model
+  const user = new User({
+    firstName: "Preethi",
+    lastName: "G",
+    emailId: "preethi@gamil.com",
+    password: "preethi@123",
+  });
   try {
-    res.send("user found successfully");
+    await user.save();
+    res.send("user signup successfully");
   } catch (err) {
-    res.status(404).send("somethign wrong");
+    res.status(400).send("Error" + `${err.message}`);
   }
 });
 
-app.use((err, req, res, next) => {
-  if (err) {
-    console.log(err);
-    res.status(400).send("Something went Wrong");
-  }
-});
-app.listen(6666, () => {
-  console.log("Server started");
-});
+connectDB()
+  .then(() => {
+    console.log("database connection established");
+    app.listen(6666, () => {
+      console.log("Server started");
+    });
+  })
+  .catch((err) => {
+    console.log("database not connected");
+  });
