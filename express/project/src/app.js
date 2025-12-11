@@ -16,6 +16,8 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+//get users
+
 app.get("/users", async (req, res) => {
   let userEmail = req.body.emailId;
   try {
@@ -45,11 +47,25 @@ app.get("/user", async (req, res) => {
   }
 });
 
+//delete user
 app.delete("/user", async (req, res) => {
   let userId = req.body.userId;
   try {
     await User.findByIdAndDelete(userId);
     res.send("user deleted successfully");
+  } catch (err) {
+    res.status(400).send("something went wrong");
+  }
+});
+
+//update user by patch method
+
+app.patch("/user", async (req, res) => {
+  let userId = req.body.userId;
+  let data = req.body;
+  try {
+    await User.findByIdAndUpdate(userId, data);
+    res.send("user updated successfully");
   } catch (err) {
     res.status(400).send("something went wrong");
   }
