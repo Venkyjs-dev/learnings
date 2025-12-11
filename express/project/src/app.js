@@ -35,7 +35,11 @@ app.get("/user", async (req, res) => {
   let userName = req.body.firstName;
   try {
     let user = await User.findOne({ firstName: userName });
-    res.send(user);
+    if (!user) {
+      res.status(404).send("user not found");
+    } else {
+      res.send(user);
+    }
   } catch (err) {
     res.status(400).send("something went wrong");
   }
