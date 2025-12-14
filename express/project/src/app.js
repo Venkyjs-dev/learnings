@@ -4,8 +4,11 @@ const app = express();
 const User = require("./models/user");
 const { validation } = require("./utils/validation");
 const bcrypt = require("bcrypt");
+const cookieParse = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 app.use(express.json()); //this is the method to convert user json object to js object
+app.use(cookieParse());
 app.post("/signup", async (req, res) => {
   try {
     validation(req);
@@ -35,13 +38,35 @@ app.post("/login", async (req, res) => {
       throw new Error("Invalid Credentials");
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
+
     if (isPasswordValid) {
+      const token = await jwt.sign({ _id: user._id }, "PROJECT@devTinder");
+      res.cookie("token", token);
       res.send("Login Successfully");
     } else {
       throw new Error("Invalid Credentials");
     }
   } catch (err) {
     res.status(400).send("Error: " + err.message);
+  }
+});
+
+app.get("/profile", async (req, res) => {
+  try {
+    const cookies = req.cookies;
+    const { token } = cookies;
+    if (!token) {
+      throw new Error("Invalid Token");
+    }
+    const decodeMessage = await jwt.verify(token, "PROJECT@devTinder");
+    const { _id } = decodeMessage;
+    const user = await User.findById(_id);
+    if (!user) {
+      throw new Error("user does not exist");
+    }
+    res.send(user);
+  } catch (err) {
+    res.status(400).send("Error : " + err.message);
   }
 });
 //get users
