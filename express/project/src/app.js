@@ -6,6 +6,7 @@ const { validation } = require("./utils/validation");
 const bcrypt = require("bcrypt");
 const cookieParse = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const { userAuth } = require("./middlerwares/auth");
 
 app.use(express.json()); //this is the method to convert user json object to js object
 app.use(cookieParse());
@@ -51,19 +52,10 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/profile", async (req, res) => {
+app.get("/profile", userAuth, async (req, res) => {
   try {
-    const cookies = req.cookies;
-    const { token } = cookies;
-    if (!token) {
-      throw new Error("Invalid Token");
-    }
-    const decodeMessage = await jwt.verify(token, "PROJECT@devTinder");
-    const { _id } = decodeMessage;
-    const user = await User.findById(_id);
-    if (!user) {
-      throw new Error("user does not exist");
-    }
+    console.log(req.user);
+    const user = req.user;
     res.send(user);
   } catch (err) {
     res.status(400).send("Error : " + err.message);
