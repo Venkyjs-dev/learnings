@@ -132,3 +132,26 @@ export const largestNumInArr = (arr) => {
 };
 
 //Find Second Largest Number:
+
+export function seconLargetNum(arr) {
+  // validations
+
+  // main logic
+  let largest = -Infinity;
+  let secLargest = -Infinity;
+  for (let i = 0; i < arr.length; i++) {
+    let num = arr[i];
+    // @todo: validate num
+
+    if (num > largest) {
+      largest = num;
+      secLargest = largest;
+    } else if (num > secLargest && num < largest) {
+      secLargest = num;
+    }
+  }
+  return secLargest;
+}
+
+const arr1 = [1, 3, 2, 5, 7];
+console.log(seconLargetNum(arr1));
